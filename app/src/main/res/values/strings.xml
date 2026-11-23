@@ -743,6 +743,7 @@
     <string name="mobile_enter_fullscreen">Enter fullscreen</string>
     <string name="mobile_exit_fullscreen">Exit fullscreen</string>
     <string name="mobile_collapse_toolbar">Minimize toolbar</string>
+    <string name="mobile_hide_touch_overlay">Hide on-screen controls</string>
     <string name="mobile_expand_toolbar">Show toolbar</string>
     <string name="mobile_game_menu">Game menu</string>
     <string name="mobile_camera">Camera</string>

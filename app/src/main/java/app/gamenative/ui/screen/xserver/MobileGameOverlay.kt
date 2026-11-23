@@ -86,7 +86,7 @@ internal fun BoxScope.MobileGameOverlay(
     browserConnectionStalled: Boolean,
     onRetryBrowserLogin: () -> Unit,
 ) {
-    if (!visible || receiver == null) return
+    if (!visible || receiver == null || controls.overlayHidden) return
     DisposableEffect(controls, receiver, canPlayWithTouch) {
         onDispose {
             if (controls.chatting) {
@@ -115,7 +115,7 @@ internal fun BoxScope.MobileGameOverlay(
     }
     SideEffect { controls.lookSensitivity = sensitivity }
 
-    val compactToolbar = toolbarMinimized && playing && !chatting && editor == null
+    val compactToolbar = toolbarMinimized && !chatting && editor == null
     fun setToolbarMinimized(minimized: Boolean) {
         toolbarMinimized = minimized
         preferences.edit().putBoolean("toolbar_minimized", minimized).apply()
@@ -181,7 +181,7 @@ internal fun BoxScope.MobileGameOverlay(
                     .onSizeChanged { if (!compactToolbar) toolbar = it }
             } else {
                 Modifier.align(Alignment.TopCenter).safeDrawingPadding().padding(top = 5.dp)
-                    .onSizeChanged { toolbar = it }
+                    .onSizeChanged { if (!compactToolbar) toolbar = it }
             }
             Surface(
                 modifier = toolbarModifier,
@@ -257,7 +257,7 @@ internal fun BoxScope.MobileGameOverlay(
                         }
                     }
 
-                    if (playing && !chatting && editor == null) {
+                    if (!chatting && editor == null) {
                         IconButton(onClick = { setToolbarMinimized(true) }, modifier = Modifier.size(48.dp)) {
                             Icon(Icons.Filled.KeyboardArrowUp, stringResource(R.string.mobile_collapse_toolbar))
                         }
@@ -323,7 +323,7 @@ internal fun BoxScope.MobileGameOverlay(
             }
         }
 
-        if (browserConnectionStalled && !playing && toolbar.height > 0) {
+        if (browserConnectionStalled && !playing && !compactToolbar && toolbar.height > 0) {
             Surface(
                 modifier = Modifier.align(Alignment.TopCenter).safeDrawingPadding()
                     .padding(top = with(density) { toolbar.height.toDp() } + 9.dp),

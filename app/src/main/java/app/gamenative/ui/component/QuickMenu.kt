@@ -56,6 +56,7 @@ import androidx.compose.material.icons.filled.ScreenRotation
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.TouchApp
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.BatteryChargingFull
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -119,6 +120,7 @@ object QuickMenuAction {
     const val SHOOTER_MODE = 9
     const val RADIAL_MENU = 10
     const val GYRO = 11
+    const val HIDE_TOUCH_OVERLAY = 12
 }
 
 private object QuickMenuTab {
@@ -391,6 +393,14 @@ fun QuickMenu(
                 id = QuickMenuAction.EDIT_CONTROLS,
                 icon = Icons.Default.Edit,
                 labelResId = R.string.edit_controls,
+                accentColor = PluviaTheme.colors.accentPurple,
+            )
+        )
+        add(
+            QuickMenuItem(
+                id = QuickMenuAction.HIDE_TOUCH_OVERLAY,
+                icon = Icons.Default.VisibilityOff,
+                labelResId = R.string.mobile_hide_touch_overlay,
                 accentColor = PluviaTheme.colors.accentPurple,
             )
         )

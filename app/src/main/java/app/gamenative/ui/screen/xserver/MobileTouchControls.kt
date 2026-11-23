@@ -1,5 +1,6 @@
 package app.gamenative.ui.screen.xserver
 
+import android.content.Context
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 import androidx.compose.runtime.getValue
@@ -27,6 +28,10 @@ internal class MobileTouchControls(private val touchSlop: Float) {
     var chatting by mutableStateOf(false)
         private set
     var hudEditor by mutableStateOf<MobileHudEditor?>(null)
+        private set
+
+    /** Hides the whole touch overlay (stick, camera zone, shortcuts and toolbar) for keyboard/controller play. */
+    var overlayHidden by mutableStateOf(false)
         private set
     var lookSensitivity = 1f
     private val cameraSlop = (touchSlop * .35f).coerceAtLeast(1f)
@@ -147,8 +152,20 @@ internal class MobileTouchControls(private val touchSlop: Float) {
         }
     }
 
+    fun loadPreferences(context: Context) {
+        overlayHidden = preferences(context).getBoolean(KEY_OVERLAY_HIDDEN, false)
+    }
+
+    fun toggleOverlayHidden(context: Context) {
+        val hidden = !overlayHidden
+        // The overlay's dispose effect closes chat and editors; drop held keys here too.
+        if (hidden) releaseAll()
+        overlayHidden = hidden
+        preferences(context).edit().putBoolean(KEY_OVERLAY_HIDDEN, hidden).apply()
+    }
+
     fun route(event: MotionEvent): Boolean {
-        if (!playing || touchpad == null) return false
+        if (!playing || overlayHidden || touchpad == null) return false
         when (hudEditor) {
             MobileHudEditor.Controls -> return true
             MobileHudEditor.Skills -> {
@@ -362,6 +379,10 @@ internal class MobileTouchControls(private val touchSlop: Float) {
 
     companion object {
         private const val NO_POINTER = -1
+        private const val KEY_OVERLAY_HIDDEN = "overlay_hidden"
+
+        private fun preferences(context: Context) =
+            context.getSharedPreferences("forever_touch", Context.MODE_PRIVATE)
 
         fun create(viewConfiguration: ViewConfiguration) =
             MobileTouchControls(viewConfiguration.scaledTouchSlop.toFloat())

@@ -21,6 +21,8 @@ val keystoreProperties: Properties? = if (keystorePropertiesFile.exists()) {
 val standaloneBuild = providers.gradleProperty("foreverStandalone").orNull == "true"
 val previewBuild = providers.gradleProperty("foreverPreview").orNull == "true"
 val pixelVulkanTestBuild = providers.gradleProperty("foreverPixelVulkanTest").orNull == "true"
+// Personal fork build: installs beside the official apps instead of replacing them.
+val forkBuild = providers.gradleProperty("foreverFork").orNull == "true"
 
 android {
     namespace = "app.gamenative"
@@ -49,11 +51,13 @@ android {
 
         // Keep this suffix for updates to the preview first shipped as .22.
         if (previewBuild) applicationIdSuffix = ".preview22"
+        if (forkBuild) applicationIdSuffix = ".fork"
 
         minSdk = 26
 
         manifestPlaceholders["screenOrientation"] = "unspecified"
         manifestPlaceholders["mobileAppLabel"] = when {
+            forkBuild -> "WoW Forever (My Build)"
             previewBuild && pixelVulkanTestBuild -> "WoW Forever Pixel Preview"
             previewBuild -> "WoW Forever Preview"
             pixelVulkanTestBuild -> "WoW Forever Mobile Pixel Test"

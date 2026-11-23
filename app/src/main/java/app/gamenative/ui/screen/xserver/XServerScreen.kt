@@ -422,7 +422,9 @@ internal fun XServerScreen(
     val context = LocalContext.current
     val view = LocalView.current
     val scope = rememberCoroutineScope()
-    val mobileControls = remember(appId) { MobileTouchControls.create(ViewConfiguration.get(context)) }
+    val mobileControls = remember(appId) {
+        MobileTouchControls.create(ViewConfiguration.get(context)).also { it.loadPreferences(context) }
+    }
     DisposableEffect(lifecycleOwner, mobileControls) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_PAUSE) mobileControls.releaseAll()
@@ -1297,6 +1299,11 @@ internal fun XServerScreen(
                         areControlsVisible = true
                     }
                 }
+                true
+            }
+
+            QuickMenuAction.HIDE_TOUCH_OVERLAY -> {
+                mobileControls.toggleOverlayHidden(context)
                 true
             }
 
@@ -2824,6 +2831,7 @@ internal fun XServerScreen(
                 if (isTouchscreenModeActive) add(QuickMenuAction.TOUCHSCREEN_MODE)
                 if (isShooterModeActive) add(QuickMenuAction.SHOOTER_MODE)
                 if (isDisableMouseInput) add(QuickMenuAction.DISABLE_MOUSE)
+                if (mobileControls.overlayHidden) add(QuickMenuAction.HIDE_TOUCH_OVERLAY)
             },
             // LSFG hot-reload (tab only visible when enabled in container settings)
             lsfg = LsfgQuickMenuState(
