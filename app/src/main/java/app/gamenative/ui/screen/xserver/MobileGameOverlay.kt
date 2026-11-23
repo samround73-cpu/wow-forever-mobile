@@ -313,6 +313,10 @@ internal fun BoxScope.MobileGameOverlay(
                                     onToggleFullscreen()
                                 })
                             }
+                            DropdownMenuItem(text = { Text(stringResource(R.string.mobile_hide_touch_overlay)) }, onClick = {
+                                showMenu = false
+                                controls.toggleOverlayHidden(context)
+                            })
                             DropdownMenuItem(text = { Text(stringResource(R.string.mobile_diagnostics)) }, onClick = {
                                 showMenu = false
                                 showDiagnostics = true

@@ -2,12 +2,14 @@ package app.gamenative.ui.screen.xserver
 
 import android.content.Context
 import android.view.MotionEvent
+import android.widget.Toast
 import android.view.ViewConfiguration
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import app.gamenative.R
 import com.winlator.widget.TouchpadView
 import com.winlator.winhandler.MouseEventFlags
 import com.winlator.xserver.Pointer
@@ -153,7 +155,7 @@ internal class MobileTouchControls(private val touchSlop: Float) {
     }
 
     fun loadPreferences(context: Context) {
-        overlayHidden = preferences(context).getBoolean(KEY_OVERLAY_HIDDEN, false)
+        overlayHidden = isOverlayHidden(context)
     }
 
     fun toggleOverlayHidden(context: Context) {
@@ -161,7 +163,10 @@ internal class MobileTouchControls(private val touchSlop: Float) {
         // The overlay's dispose effect closes chat and editors; drop held keys here too.
         if (hidden) releaseAll()
         overlayHidden = hidden
-        preferences(context).edit().putBoolean(KEY_OVERLAY_HIDDEN, hidden).apply()
+        setOverlayHidden(context, hidden)
+        if (hidden) {
+            Toast.makeText(context, R.string.mobile_touch_overlay_hidden_hint, Toast.LENGTH_LONG).show()
+        }
     }
 
     fun route(event: MotionEvent): Boolean {
@@ -383,6 +388,12 @@ internal class MobileTouchControls(private val touchSlop: Float) {
 
         private fun preferences(context: Context) =
             context.getSharedPreferences("forever_touch", Context.MODE_PRIVATE)
+
+        fun isOverlayHidden(context: Context) = preferences(context).getBoolean(KEY_OVERLAY_HIDDEN, false)
+
+        fun setOverlayHidden(context: Context, hidden: Boolean) {
+            preferences(context).edit().putBoolean(KEY_OVERLAY_HIDDEN, hidden).apply()
+        }
 
         fun create(viewConfiguration: ViewConfiguration) =
             MobileTouchControls(viewConfiguration.scaledTouchSlop.toFloat())

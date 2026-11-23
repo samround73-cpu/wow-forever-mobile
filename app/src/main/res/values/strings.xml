@@ -744,6 +744,9 @@
     <string name="mobile_exit_fullscreen">Exit fullscreen</string>
     <string name="mobile_collapse_toolbar">Minimize toolbar</string>
     <string name="mobile_hide_touch_overlay">Hide on-screen controls</string>
+    <string name="mobile_touch_overlay_hidden_hint">On-screen controls hidden. To bring them back, use the back gesture and open the Controller tab, or change it on the launcher screen.</string>
+    <string name="mobile_launcher_touch_controls_shown">On-screen controls: Shown</string>
+    <string name="mobile_launcher_touch_controls_hidden">On-screen controls: Hidden</string>
     <string name="mobile_expand_toolbar">Show toolbar</string>
     <string name="mobile_game_menu">Game menu</string>
     <string name="mobile_camera">Camera</string>

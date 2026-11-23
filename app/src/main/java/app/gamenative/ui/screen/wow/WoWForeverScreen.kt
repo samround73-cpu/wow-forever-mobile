@@ -27,6 +27,8 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -49,6 +51,7 @@ import app.gamenative.BuildConfig
 import app.gamenative.PluviaApp
 import app.gamenative.PrefManager
 import app.gamenative.R
+import app.gamenative.ui.screen.xserver.MobileTouchControls
 import app.gamenative.data.TouchGestureConfig
 import app.gamenative.events.AndroidEvent
 import app.gamenative.ui.screen.wow.WowClientDownloader.BUILD_INFO
@@ -536,6 +539,18 @@ internal fun WoWForeverScreen(
                             RenderResolution.save(context, it)
                             resolution = it
                         }
+                    }
+                    var touchControlsHidden by remember { mutableStateOf(MobileTouchControls.isOverlayHidden(context)) }
+                    LinkButton(
+                        stringResource(
+                            if (touchControlsHidden) R.string.mobile_launcher_touch_controls_hidden
+                            else R.string.mobile_launcher_touch_controls_shown,
+                        ),
+                        if (touchControlsHidden) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                        !isLaunching,
+                    ) {
+                        touchControlsHidden = !touchControlsHidden
+                        MobileTouchControls.setOverlayHidden(context, touchControlsHidden)
                     }
 
                     errorMessage?.let {
