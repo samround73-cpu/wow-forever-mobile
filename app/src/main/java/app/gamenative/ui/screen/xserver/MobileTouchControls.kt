@@ -2,7 +2,6 @@ package app.gamenative.ui.screen.xserver
 
 import android.content.Context
 import android.view.MotionEvent
-import android.widget.Toast
 import android.view.ViewConfiguration
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import app.gamenative.R
+import app.gamenative.ui.util.SnackbarManager
 import com.winlator.widget.TouchpadView
 import com.winlator.winhandler.MouseEventFlags
 import com.winlator.xserver.Pointer
@@ -165,7 +165,7 @@ internal class MobileTouchControls(private val touchSlop: Float) {
         overlayHidden = hidden
         setOverlayHidden(context, hidden)
         if (hidden) {
-            Toast.makeText(context, R.string.mobile_touch_overlay_hidden_hint, Toast.LENGTH_LONG).show()
+            SnackbarManager.show(context.getString(R.string.mobile_touch_overlay_hidden_hint))
         }
     }
 
